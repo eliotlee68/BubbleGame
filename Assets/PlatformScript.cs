@@ -3,13 +3,8 @@ using UnityEngine;
 public class PlatformScript : MonoBehaviour
 {
     public float moveSpeed = 0.9f;
-    public float deadZone = -35;
-    private Vector3 previousPosition;
+    public float deadZone = -30;
 
-    private void Start()
-    {
-        previousPosition = transform.position;
-    }
     // Update is called once per frame
     void Update()
     {
@@ -17,7 +12,7 @@ public class PlatformScript : MonoBehaviour
 
         if (transform.position.y < deadZone)
         {
-            Debug.Log("Platform Deleted");
+            //Debug.Log("Platform Deleted");
             Destroy(gameObject);
         }
     }
