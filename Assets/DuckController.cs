@@ -21,12 +21,29 @@ public class DuckController : MonoBehaviour
     private bool isInBubble;
     private bool facingLeft = true;
     private BubbleScript currentBubble;
-    private bool isAlive = true;
+    private float minX, maxX; // horizontal bounds for ducky
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        CalculateCameraBounds();
+    }
+
+    void CalculateCameraBounds()
+    {
+        // Get the main camera
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogError("Main camera not found!");
+            return;
+        }
+
+        // Calculate the bounds in world coordinates
+        float duckWidth = GetComponent<SpriteRenderer>().bounds.size.x / 2; // Half the duck's width
+        minX = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).x + duckWidth; // Left bound
+        maxX = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, 0)).x - duckWidth; // Right bound
     }
 
     // Update is called once per frame
@@ -81,6 +98,19 @@ public class DuckController : MonoBehaviour
         {
             Die();
         }
+
+        ClampPosition();
+    }
+    void ClampPosition()
+    {
+        // Get the duck's current position
+        Vector3 position = transform.position;
+
+        // Clamp the X position to the camera bounds
+        position.x = Mathf.Clamp(position.x, minX, maxX);
+
+        // Update the duck's position
+        transform.position = position;
     }
 
     void Flip()
@@ -134,9 +164,7 @@ public class DuckController : MonoBehaviour
 
     public void Die()
     {
-        isAlive = false;
         ScoringScript.Instance.enabled = false;
-
         SceneManager.LoadScene(2);
     }
 }
