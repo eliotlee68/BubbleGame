@@ -32,9 +32,17 @@ public class ScoringScript : MonoBehaviour
         // Increase the score every second
         if (timer >= 1f)
         {
+            //Debug.Log("SCORE");
             AddScore(1);
             timer = 0f; // Reset the timer
         }
+    }
+
+    public void SetScoreText(TMP_Text newScoreText)
+    {
+        scoreText = newScoreText; // Update the scoreText reference
+        UpdateScoreText(); // Refresh the UI
+        Debug.Log("Score text reference updated: " + (scoreText != null ? "Valid" : "Null"));
     }
 
     public void AddScore(int amount)

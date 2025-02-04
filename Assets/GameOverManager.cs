@@ -18,6 +18,7 @@ public class GameOverManager : MonoBehaviour
     // Called when the "Restart" button is clicked
     public void RestartGame()
     {
+        ScoringScript.Instance.enabled = true;
         ScoringScript.Instance.ResetScore();
         SceneManager.LoadScene(1);
     }

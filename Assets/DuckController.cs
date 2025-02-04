@@ -172,7 +172,6 @@ public class DuckController : MonoBehaviour
 
     public void Die()
     {
-        isAlive = false;
         ScoringScript.Instance.enabled = false;
         SceneManager.LoadScene(2);
     }
