@@ -5,14 +5,14 @@ public class PlatformSpawnerScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [Header("Spawn Settings")]
     public GameObject platformPrefab; // The platform prefab to spawn
-    public float maxSpawnRate = 3.5f; // How often platforms spawn (in seconds)
-    public float minSpawnRate = 1.0f;
+    public float maxSpawnRate = 3.5f; // Minimum spawn rate
+    public float minSpawnRate = 1.0f; // Maximum spawn rate
     public float minSpeed = 0.5f; // Minimum platform speed
     public float maxSpeed = 2f; // Maximum platform speed
     public float minLength = 1f; // Minimum platform length
     public float maxLength = 4f; // Maximum platform length
     public float xRange = 50f; // Range of X positions for spawning (left and right bounds)
-    public float xOffset = 22.5f;
+    public float xOffset = 22.5f; // Position of platform
 
     [Header("Camera Bounds")]
     public float spawnHeight = 40f; // Height above the camera to spawn platforms
