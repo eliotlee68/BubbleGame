@@ -22,8 +22,8 @@ public class DuckController : MonoBehaviour
     private bool facingLeft = true;
     private BubbleScript currentBubble;
     private float minX, maxX; // horizontal bounds for ducky
+    private bool isAlive = true;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -46,15 +46,26 @@ public class DuckController : MonoBehaviour
         maxX = mainCamera.ViewportToWorldPoint(new Vector3(1, 0, 0)).x - duckWidth; // Right bound
     }
 
-    // Update is called once per frame
     void Update()
     {
         isGrounded = Physics2D.OverlapCircle(platformCheck.position, platformCheckRadius, groundLayer);
 
         // Handle movement input
         float moveInput = Input.GetAxis("Horizontal");
+        Move(moveInput);
+        FlipLogic(moveInput);
+        Jump();
 
-        // Allow movement only if not in a bubble
+        // Handle death
+        if (transform.position.y < deadzone)
+        {
+            Die();
+        }
+        ClampPosition();
+    }
+
+    private void Move(float moveInput)
+    {
         if (!isInBubble)
         {
             rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
@@ -74,8 +85,10 @@ public class DuckController : MonoBehaviour
                 ExitBubble();
             }
         }
+    }
 
-        // Handle flipping the duck
+    private void FlipLogic(float moveInput)
+    {
         if (moveInput > 0 && facingLeft)
         {
             Flip();
@@ -84,23 +97,18 @@ public class DuckController : MonoBehaviour
         {
             Flip();
         }
+    }
 
-        // Handle jumping, has to be on platform and not in bubble
+    private void Jump()
+    {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isInBubble)
         {
             Debug.Log("jumpin");
             Detach();
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
-
-        // Handle death
-        if (transform.position.y < deadzone)
-        {
-            Die();
-        }
-
-        ClampPosition();
     }
+
     void ClampPosition()
     {
         // Get the duck's current position
